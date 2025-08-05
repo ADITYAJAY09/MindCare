@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCare - Mental Health Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__logo">
+                    <h2>MindCare</h2>
+                </div>
+                <nav class="header__nav" id="mainNav">
+                    <div class="nav__user-info" id="userInfo" style="display: none;">
+                        <span id="userName"></span>
+                        <button class="btn btn--sm btn--outline" id="logoutBtn">Logout</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Landing Page -->
+    <main class="main" id="landingPage">
+        <section class="hero">
+            <div class="container">
+                <div class="hero__content">
+                    <div class="hero__text">
+                        <h1>Your Mental Health Journey Starts Here</h1>
+                        <p>Professional assessments, expert doctor connections, and personalized care management all in one secure platform.</p>
+                        <div class="hero__actions">
+                            <button class="btn btn--primary btn--lg" id="getStartedBtn">Get Started</button>
+                            <button class="btn btn--outline btn--lg" id="loginToggleBtn">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auth Modal -->
+        <div class="modal hidden" id="authModal">
+            <div class="modal__overlay" id="modalOverlay"></div>
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3 id="modalTitle">Create Account</h3>
+                    <button class="modal__close" id="modalClose">&times;</button>
+                </div>
+                <div class="modal__body">
+                    <!-- Registration Form -->
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <input type="text" id="regName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" name="password" required>
+                            <small>Password must be at least 8 characters with uppercase, lowercase, number, and special character</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">Confirm Password</label>
+                            <input type="password" id="regConfirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="termsAccept" required>
+                                I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full">Create Account</button>
+                        <p class="form-switch">Already have an account? <a href="#" id="switchToLogin" class="link">Login here</a></p>
+                    </form>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form hidden">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" name="password" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="rememberMe">
+                                Remember me
+                            </label>
+                            <a href="#" class="link forgot-password">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full">Login</button>
+                        <p class="form-switch">Don't have an account? <a href="#" id="switchToRegister" class="link">Sign up here</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Dashboard -->
+    <main class="main dashboard hidden" id="dashboardPage">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar__header">
+                <div class="user-avatar">
+                    <span id="userInitials">JD</span>
+                </div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">John Doe</h4>
+                    <p>Patient</p>
+                </div>
+            </div>
+            <nav class="sidebar__nav">
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link active" data-section="overview">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" data-section="assessments">Assessments</a></li>
+                    <li><a href="#" class="nav-link" data-section="doctors">Find Doctors</a></li>
+                    <li><a href="#" class="nav-link" data-section="appointments">Appointments</a></li>
+                    <li><a href="#" class="nav-link" data-section="resources">Resources</a></li>
+                    <li><a href="#" class="nav-link" data-section="profile">Profile</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="dashboard__content">
+            <!-- Overview Section -->
+            <section id="overviewSection" class="dashboard__section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                    <p>Welcome back! Here's your mental health journey summary.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="stats-icon">📊</div>
+                        <div class="stats-info">
+                            <h3 id="totalAssessments">0</h3>
+                            <p>Assessments Completed</p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">👨‍⚕️</div>
+                        <div class="stats-info">
+                            <h3 id="totalAppointments">0</h3>
+                            <p>Appointments Scheduled</p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">📈</div>
+                        <div class="stats-info">
+                            <h3 id="progressScore">-</h3>
+                            <p>Latest Progress Score</p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">🎯</div>
+                        <div class="stats-info">
+                            <h3 id="nextAppointment">None</h3>
+                            <p>Next Appointment</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="progress-chart">
+                        <h3>Assessment Progress</h3>
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div id="activityList" class="activity-list">
+                            <p class="no-activity">No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Assessments Section -->
+            <section id="assessmentsSection" class="dashboard__section">
+                <div class="section-header">
+                    <h2>Mental Health Assessments</h2>
+                    <p>Take validated screenings to track your mental health journey.</p>
+                </div>
+
+                <div class="assessments-grid">
+                    <div class="assessment-card" data-assessment="phq9">
+                        <div class="assessment-header">
+                            <h3>PHQ-9 Depression Assessment</h3>
+                            <span class="assessment-badge">9 Questions</span>
+                        </div>
+                        <p>Screen for depression symptoms with this clinically validated tool.</p>
+                        <div class="assessment-footer">
+                            <span class="time-estimate">⏱️ 5-10 minutes</span>
+                            <button class="btn btn--primary">Take Assessment</button>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card" data-assessment="gad7">
+                        <div class="assessment-header">
+                            <h3>GAD-7 Anxiety Assessment</h3>
+                            <span class="assessment-badge">7 Questions</span>
+                        </div>
+                        <p>Evaluate anxiety symptoms and their impact on daily life.</p>
+                        <div class="assessment-footer">
+                            <span class="time-estimate">⏱️ 3-5 minutes</span>
+                            <button class="btn btn--primary">Take Assessment</button>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card" data-assessment="stress">
+                        <div class="assessment-header">
+                            <h3>Stress Assessment</h3>
+                            <span class="assessment-badge">10 Questions</span>
+                        </div>
+                        <p>Measure your current stress levels and identify coping strategies.</p>
+                        <div class="assessment-footer">
+                            <span class="time-estimate">⏱️ 5-8 minutes</span>
+                            <button class="btn btn--primary">Take Assessment</button>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card" data-assessment="sleep">
+                        <div class="assessment-header">
+                            <h3>Sleep Quality Assessment</h3>
+                            <span class="assessment-badge">8 Questions</span>
+                        </div>
+                        <p>Assess your sleep patterns and quality for better mental health.</p>
+                        <div class="assessment-footer">
+                            <span class="time-estimate">⏱️ 3-5 minutes</span>
+                            <button class="btn btn--primary">Take Assessment</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="assessment-history">
+                    <h3>Assessment History</h3>
+                    <div id="assessmentHistory" class="history-list">
+                        <p class="no-history">No assessments completed yet.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Assessment Modal -->
+            <div class="modal hidden" id="assessmentModal">
+                <div class="modal__overlay"></div>
+                <div class="modal__content modal__content--large">
+                    <div class="modal__header">
+                        <h3 id="assessmentTitle">Assessment</h3>
+                        <button class="modal__close" id="assessmentModalClose">&times;</button>
+                    </div>
+                    <div class="modal__body">
+                        <div id="assessmentContent">
+                            <div class="assessment-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="assessmentProgress"></div>
+                                </div>
+                                <span id="questionCounter">Question 1 of 9</span>
+                            </div>
+                            <div id="assessmentQuestions"></div>
+                            <div class="assessment-nav">
+                                <button class="btn btn--outline" id="prevQuestion" disabled>Previous</button>
+                                <button class="btn btn--primary" id="nextQuestion">Next</button>
+                            </div>
+                        </div>
+                        <div id="assessmentResults" class="hidden">
+                            <div class="results-header">
+                                <h4>Assessment Results</h4>
+                                <div class="score-display">
+                                    <span class="score-number" id="finalScore">0</span>
+                                    <span class="score-label" id="scoreLabel">Score</span>
+                                </div>
+                            </div>
+                            <div class="results-interpretation">
+                                <h5>Interpretation</h5>
+                                <p id="scoreInterpretation"></p>
+                            </div>
+                            <div class="results-recommendations">
+                                <h5>Recommendations</h5>
+                                <div id="recommendations"></div>
+                            </div>
+                            <div class="results-actions">
+                                <button class="btn btn--primary" id="findDoctorsBtn">Find Specialists</button>
+                                <button class="btn btn--outline" id="saveResultsBtn">Save Results</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctors Section -->
+            <section id="doctorsSection" class="dashboard__section">
+                <div class="section-header">
+                    <h2>Find Mental Health Professionals</h2>
+                    <p>Connect with qualified specialists in your area.</p>
+                </div>
+
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label>Location</label>
+                        <input type="text" id="locationFilter" placeholder="Enter city or zip code">
+                    </div>
+                    <div class="filter-group">
+                        <label>Specialization</label>
+                        <select id="specializationFilter">
+                            <option value="">All Specializations</option>
+                            <option value="Psychiatrist">Psychiatrist</option>
+                            <option value="Psychologist">Psychologist</option>
+                            <option value="Counselor">Counselor</option>
+                            <option value="Therapist">Therapist</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort By</label>
+                        <select id="sortFilter">
+                            <option value="rating">Rating</option>
+                            <option value="distance">Distance</option>
+                            <option value="experience">Experience</option>
+                            <option value="fees">Fees</option>
+                        </select>
+                    </div>
+                    <button class="btn btn--primary" id="searchDoctors">Search</button>
+                </div>
+
+                <div id="doctorsList" class="doctors-grid">
+                    <!-- Doctors will be populated here -->
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointmentsSection" class="dashboard__section">
+                <div class="section-header">
+                    <h2>Appointments</h2>
+                    <p>Manage your scheduled appointments and book new ones.</p>
+                </div>
+
+                <div class="appointments-actions">
+                    <button class="btn btn--primary" id="bookAppointmentBtn">Book New Appointment</button>
+                </div>
+
+                <div class="appointments-tabs">
+                    <button class="tab-btn active" data-tab="upcoming">Upcoming</button>
+                    <button class="tab-btn" data-tab="past">Past</button>
+                    <button class="tab-btn" data-tab="cancelled">Cancelled</button>
+                </div>
+
+                <div id="appointmentsList" class="appointments-list">
+                    <p class="no-appointments">No appointments scheduled.</p>
+                </div>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resourcesSection" class="dashboard__section">
+                <div class="section-header">
+                    <h2>Mental Health Resources</h2>
+                    <p>Educational materials and support resources for your mental health journey.</p>
+                </div>
+
+                <div class="resources-grid">
+                    <div class="resource-category">
+                        <h3>Educational Articles</h3>
+                        <div class="resource-list">
+                            <div class="resource-item">
+                                <h4>Understanding Depression</h4>
+                                <p>Comprehensive guide to recognizing and understanding depression symptoms.</p>
+                                <a href="#" class="btn btn--sm btn--outline">Read More</a>
+                            </div>
+                            <div class="resource-item">
+                                <h4>Anxiety Management Techniques</h4>
+                                <p>Practical strategies for managing anxiety in daily life.</p>
+                                <a href="#" class="btn btn--sm btn--outline">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resource-category">
+                        <h3>Crisis Support</h3>
+                        <div class="crisis-contacts">
+                            <div class="crisis-item urgent">
+                                <h4>National Suicide Prevention Lifeline</h4>
+                                <p class="crisis-number">988</p>
+                                <p>24/7 crisis support and suicide prevention</p>
+                            </div>
+                            <div class="crisis-item">
+                                <h4>Crisis Text Line</h4>
+                                <p class="crisis-number">Text HOME to 741741</p>
+                                <p>24/7 text-based crisis support</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resource-category">
+                        <h3>Self-Help Tools</h3>
+                        <div class="resource-list">
+                            <div class="resource-item">
+                                <h4>Mindfulness Exercises</h4>
+                                <p>Guided meditation and mindfulness practices.</p>
+                                <a href="#" class="btn btn--sm btn--outline">Try Now</a>
+                            </div>
+                            <div class="resource-item">
+                                <h4>Mood Tracking Journal</h4>
+                                <p>Daily mood tracking and reflection exercises.</p>
+                                <a href="#" class="btn btn--sm btn--outline">Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profileSection" class="dashboard__section">
+                <div class="section-header">
+                    <h2>Profile Settings</h2>
+                    <p>Manage your account information and preferences.</p>
+                </div>
+
+                <div class="profile-tabs">
+                    <button class="tab-btn active" data-tab="personal">Personal Info</button>
+                    <button class="tab-btn" data-tab="medical">Medical History</button>
+                    <button class="tab-btn" data-tab="privacy">Privacy & Security</button>
+                </div>
+
+                <div class="profile-content">
+                    <div id="personalTab" class="tab-content active">
+                        <form id="profileForm" class="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="tel" id="phone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateOfBirth">Date of Birth</label>
+                                    <input type="date" id="dateOfBirth" name="dateOfBirth">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn--primary">Update Profile</button>
+                        </form>
+                    </div>
+
+                    <div id="medicalTab" class="tab-content">
+                        <form id="medicalForm" class="profile-form">
+                            <div class="form-group">
+                                <label for="allergies">Allergies</label>
+                                <textarea id="allergies" name="allergies" rows="3" placeholder="List any known allergies"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="medications">Current Medications</label>
+                                <textarea id="medications" name="medications" rows="3" placeholder="List current medications"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="medicalHistory">Medical History</label>
+                                <textarea id="medicalHistory" name="medicalHistory" rows="4" placeholder="Relevant medical history"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="emergencyContact">Emergency Contact</label>
+                                <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Name and phone number">
+                            </div>
+                            <button type="submit" class="btn btn--primary">Update Medical Info</button>
+                        </form>
+                    </div>
+
+                    <div id="privacyTab" class="tab-content">
+                        <div class="privacy-settings">
+                            <div class="setting-item">
+                                <h4>Data Sharing</h4>
+                                <p>Control how your data is shared with healthcare providers.</p>
+                                <label class="toggle">
+                                    <input type="checkbox" id="dataSharing">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <h4>Email Notifications</h4>
+                                <p>Receive appointment reminders and health tips.</p>
+                                <label class="toggle">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <h4>SMS Notifications</h4>
+                                <p>Receive text message reminders and alerts.</p>
+                                <label class="toggle">
+                                    <input type="checkbox" id="smsNotifications">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="danger-zone">
+                            <h4>Danger Zone</h4>
+                            <p>Permanently delete your account and all associated data.</p>
+                            <button class="btn btn--danger" id="deleteAccountBtn">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
